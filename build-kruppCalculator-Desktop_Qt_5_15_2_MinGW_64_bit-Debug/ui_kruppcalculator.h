@@ -386,6 +386,7 @@ public:
         video_container = new QLabel(centralwidget);
         video_container->setObjectName(QString::fromUtf8("video_container"));
         video_container->setFrameShape(QFrame::Box);
+        video_container->setAlignment(Qt::AlignCenter);
         video_container->setTextInteractionFlags(Qt::NoTextInteraction);
 
         verticalLayout->addWidget(video_container);
@@ -397,7 +398,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 616, 72));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 622, 68));
         verticalLayout_2 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         log_label = new QLabel(scrollAreaWidgetContents);

@@ -1,5 +1,6 @@
 #include "kruppcalculator.h"
-
+#include <QLabel>
+#include <QMovie>
 #include <QApplication>
 
 int main(int argc, char *argv[])

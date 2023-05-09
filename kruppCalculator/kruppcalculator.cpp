@@ -11,6 +11,7 @@ KruppCalculator::KruppCalculator(QWidget *parent)
     , ui(new Ui::KruppCalculator)
 {
     ui->setupUi(this);
+    ui->video_container->setVisible(false);
 }
 
 KruppCalculator::~KruppCalculator()
@@ -88,7 +89,7 @@ void KruppCalculator::on_cal_convert_btn_clicked()
         }
     }
     else
-        // converting in to mm
+    // converting in to mm
     {
         ui->cal_measure_label->setText("mm");
         calMeasurementBool = false;
@@ -150,7 +151,7 @@ void KruppCalculator::on_mass_convert_btn_clicked()
 
     }
     else
-        // converting lb to kg
+    // converting lb to kg
     {
         ui->mass_measure_label->setText("kg");
         massMeasurementBool = false;
@@ -211,7 +212,7 @@ void KruppCalculator::on_vel_convert_btn_clicked()
         }
     }
     else
-        // converting feet to meters
+    // converting feet to meters
     {
         ui->vel_measure_label->setText("m/s");
         velMeasurementBool = false;
@@ -272,7 +273,7 @@ void KruppCalculator::on_armor_convert_btn_clicked()
         }
     }
     else
-        // converting in to mm
+    // converting in to mm
     {
         ui->armor_measure_label->setText("mm");
         armorMeasurementBool = true;
@@ -309,6 +310,8 @@ void KruppCalculator::on_calculate_btn_clicked()
     double calM, massM, velM, armorM; // metric varibles
     QString calQString, massQString, resQString, velQString, armorQString;
 
+    //Set Video Label To Hidden Until It is Needed Again
+    ui->video_container->setVisible(false);
     ui->result_lineEdit->clear();
     // checks if no areas are filled
     if (ui->armor_lineEdit->text().isEmpty() && ui->vel_lineEdit->text().isEmpty()

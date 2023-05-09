@@ -585,6 +585,9 @@ margin-bottom: 5px;
       <property name="text">
        <string/>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
       <property name="textInteractionFlags">
        <set>Qt::NoTextInteraction</set>
       </property>
@@ -606,8 +609,8 @@ margin-bottom: 5px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>616</width>
-         <height>72</height>
+         <width>622</width>
+         <height>68</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
