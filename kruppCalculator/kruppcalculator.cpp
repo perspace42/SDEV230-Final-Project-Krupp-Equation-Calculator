@@ -18,6 +18,14 @@ KruppCalculator::~KruppCalculator()
     delete ui;
 }
 
+// class variables
+// false is metric measurements
+// true is imperial measurements
+bool calMeasurementBool = false;
+bool massMeasurementBool = false;
+bool velMeasurementBool = false;
+bool armorMeasurementBool = false;
+
 //Function To Determine Which Animation Is Played
 QMovie* playAnimation(bool penetrated){
     //Set File Info
@@ -55,6 +63,7 @@ void KruppCalculator::on_cal_convert_btn_clicked()
     if (ui->cal_measure_label->text() == "mm")
     {
         ui->cal_measure_label->setText("in");
+        calMeasurementBool = true;
         // convert user input if line edit is not empty
         if (!(ui->cal_lineEdit->text().isEmpty()))
         {
@@ -82,6 +91,7 @@ void KruppCalculator::on_cal_convert_btn_clicked()
         // converting in to mm
     {
         ui->cal_measure_label->setText("mm");
+        calMeasurementBool = false;
         // convert user input if line edit is not empty
         if (!(ui->cal_lineEdit->text().isEmpty()))
         {
@@ -114,6 +124,7 @@ void KruppCalculator::on_mass_convert_btn_clicked()
     if (ui->mass_measure_label->text() == "kg")
     {
         ui->mass_measure_label->setText("lb");
+        massMeasurementBool = true;
         // convert user input if line edit is not empty
         if (!(ui->mass_lineEdit->text().isEmpty()))
         {
@@ -142,6 +153,7 @@ void KruppCalculator::on_mass_convert_btn_clicked()
         // converting lb to kg
     {
         ui->mass_measure_label->setText("kg");
+        massMeasurementBool = false;
         // convert user input if line edit is not empty
         if (!(ui->mass_lineEdit->text().isEmpty()))
         {
@@ -174,6 +186,7 @@ void KruppCalculator::on_vel_convert_btn_clicked()
     if (ui->vel_measure_label->text() == "m/s")
     {
         ui->vel_measure_label->setText("ft/s");
+        velMeasurementBool = true;
         // convert user input if line edit is not empty
         if (!(ui->vel_lineEdit->text().isEmpty()))
         {
@@ -201,6 +214,7 @@ void KruppCalculator::on_vel_convert_btn_clicked()
         // converting feet to meters
     {
         ui->vel_measure_label->setText("m/s");
+        velMeasurementBool = false;
         // convert user input if line edit is not empty
         if (!(ui->vel_lineEdit->text().isEmpty()))
         {
@@ -233,6 +247,7 @@ void KruppCalculator::on_armor_convert_btn_clicked()
     if (ui->armor_measure_label->text() == "mm")
     {
         ui->armor_measure_label->setText("in");
+        armorMeasurementBool = true;
         // convert user input if line edit is not empty
         if (!(ui->armor_lineEdit->text().isEmpty()))
         {
@@ -260,6 +275,7 @@ void KruppCalculator::on_armor_convert_btn_clicked()
         // converting in to mm
     {
         ui->armor_measure_label->setText("mm");
+        armorMeasurementBool = true;
         // convert user input if line edit is not empty
         if (!(ui->armor_lineEdit->text().isEmpty()))
         {
@@ -290,6 +306,7 @@ void KruppCalculator::on_calculate_btn_clicked()
 {
     // variables
     double cal, mass, res, vel, armor;
+    double calM, massM, velM, armorM; // metric varibles
     QString calQString, massQString, resQString, velQString, armorQString;
 
     ui->result_lineEdit->clear();
@@ -323,12 +340,39 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = ui->armor_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
+                // Set all varibles to metric
+                if (massMeasurementBool == true)
+                {
+                    massM = poundsToKilograms(mass);
+                    mass = massM;
+                }
+                if (velMeasurementBool == true)
+                {
+                    velM = feetToMeters(vel);
+                    vel = velM;
+                }
+                if (armorMeasurementBool == true)
+                {
+                    armorM = inchesToMillimeters(armor);
+                    armor = armorM;
+                }
+
                 // solve for cal
-                cal = solveForCaliber(vel, mass, res, armor);
+                calM = solveForCaliber(vel, mass, res, armor);
+
 
                 // set cal result
-                calQString = QString::number(cal);
-                ui->cal_lineEdit->setText(calQString);
+                if (calMeasurementBool == false)
+                {
+                    calQString = QString::number(calM);
+                    ui->cal_lineEdit->setText(calQString);
+                }
+                else
+                {
+                    cal = millimetersToInches(calM);
+                    calQString = QString::number(cal);
+                    ui->cal_lineEdit->setText(calQString);
+                }
             }
             else
             {
@@ -359,12 +403,39 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = ui->armor_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
+                // Set all varibles to metric
+                if (calMeasurementBool == true)
+                {
+                    calM = inchesToMillimeters(cal);
+                    cal = calM;
+                }
+                if (velMeasurementBool == true)
+                {
+                    velM = feetToMeters(vel);
+                    vel = velM;
+                }
+                if (armorMeasurementBool == true)
+                {
+                    armorM = inchesToMillimeters(armor);
+                    armor = armorM;
+                }
+
                 // solve for mass
-                mass = solveForMass(vel, armor, res, cal);
+                massM = solveForMass(vel, armor, res, cal);
+
 
                 // set mass result
-                massQString = QString::number(mass);
-                ui->mass_lineEdit->setText(massQString);
+                if (massMeasurementBool == false)
+                {
+                    massQString = QString::number(massM);
+                    ui->mass_lineEdit->setText(massQString);
+                }
+                else
+                {
+                    mass = kilogramsToPounds(massM);
+                    massQString = QString::number(mass);
+                    ui->mass_lineEdit->setText(massQString);
+                }
             }
             else
             {
@@ -395,12 +466,39 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = ui->armor_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
+                // Set all varibles to metric
+                if (calMeasurementBool == true)
+                {
+                    calM = inchesToMillimeters(cal);
+                    cal = calM;
+                }
+                if (massMeasurementBool == true)
+                {
+                    massM = poundsToKilograms(mass);
+                    mass = massM;
+                }
+                if (armorMeasurementBool == true)
+                {
+                    armorM = inchesToMillimeters(armor);
+                    armor = armorM;
+                }
+
                 // solve for velocity
-                vel = solveForVelocity(armor, mass, res, cal);
+                velM = solveForVelocity(armor, mass, res, cal);
+
 
                 // set velocity result
-                velQString = QString::number(vel);
-                ui->vel_lineEdit->setText(velQString);
+                if (velMeasurementBool == false)
+                {
+                    velQString = QString::number(velM);
+                    ui->vel_lineEdit->setText(calQString);
+                }
+                else
+                {
+                    vel = metersToFeet(velM);
+                    velQString = QString::number(vel);
+                    ui->vel_lineEdit->setText(velQString);
+                }
             }
             else
             {
@@ -430,6 +528,23 @@ void KruppCalculator::on_calculate_btn_clicked()
                 cal = ui->cal_lineEdit->text().toDouble();
                 armor = ui->armor_lineEdit->text().toDouble();
                 vel = ui->vel_lineEdit->text().toDouble();
+
+                // Set all varibles to metric
+                if (calMeasurementBool == true)
+                {
+                    calM = inchesToMillimeters(cal);
+                    cal = calM;
+                }
+                if (massMeasurementBool == true)
+                {
+                    massM = poundsToKilograms(mass);
+                    mass = massM;
+                }
+                if (armorMeasurementBool == true)
+                {
+                    armorM = inchesToMillimeters(armor);
+                    armor = armorM;
+                }
 
                 // solve for resistance
                 res = solveForResistance(vel, mass, armor, cal);
@@ -467,12 +582,39 @@ void KruppCalculator::on_calculate_btn_clicked()
                 vel = ui->vel_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
+                // Set all varibles to metric
+                if (calMeasurementBool == true)
+                {
+                    calM = inchesToMillimeters(cal);
+                    cal = calM;
+                }
+                if (massMeasurementBool == true)
+                {
+                    massM = poundsToKilograms(mass);
+                    mass = massM;
+                }
+                if (velMeasurementBool == true)
+                {
+                    velM = feetToMeters(vel);
+                    vel = velM;
+                }
+
                 // solve for armor
-                armor = solveForArmor(vel, mass, res, cal);
+                armorM = solveForArmor(vel, mass, res, cal);
+
 
                 // set armor result
-                armorQString = QString::number(armor);
-                ui->armor_lineEdit->setText(armorQString);
+                if (armorMeasurementBool == false)
+                {
+                    armorQString = QString::number(armorM);
+                    ui->armor_lineEdit->setText(armorQString);
+                }
+                else
+                {
+                    armor = millimetersToInches(armorM);
+                    armorQString = QString::number(armor);
+                    ui->armor_lineEdit->setText(armorQString);
+                }
             }
             else
             {
@@ -497,6 +639,28 @@ void KruppCalculator::on_calculate_btn_clicked()
             vel = ui->vel_lineEdit->text().toDouble();
             res = ui->res_lineEdit->text().toDouble();
             armor = ui->armor_lineEdit->text().toDouble();
+
+            // Set all varibles to metric
+            if (calMeasurementBool == true)
+            {
+                calM = inchesToMillimeters(cal);
+                cal = calM;
+            }
+            if (massMeasurementBool == true)
+            {
+                massM = poundsToKilograms(mass);
+                mass = massM;
+            }
+            if (velMeasurementBool == true)
+            {
+                velM = feetToMeters(vel);
+                vel = velM;
+            }
+            if (armorMeasurementBool == true)
+            {
+                armorM = inchesToMillimeters(armor);
+                armor = armorM;
+            }
 
             // solve for krupp
             if (solveKrupp(armor, vel, mass, res, cal))
