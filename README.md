@@ -4,4 +4,4 @@ This is the repository for the final project in the SDEV230 C++ Software Develop
 In order to build this application you must have Qt5 installed on your computer. In addition please move the images file to the same directory as the kruppCalculator.exe
 when building the application in order to have the images display the results of the Krupp Equation.
 
-Alternatively you can just run the application within the application folder.
+Alternatively you can just run the application within the application/release folder.
