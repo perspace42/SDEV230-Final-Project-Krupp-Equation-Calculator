@@ -11,7 +11,6 @@ and methods.
 #include "kruppcalculator.h"
 #include "ui_kruppcalculator.h"
 #include "krupp.h"
-#include "log.h"
 #include <QMovie>
 #include <QFileInfo>
 #include <QDir>
@@ -41,7 +40,6 @@ bool calMeasurementBool = false;
 bool massMeasurementBool = false;
 bool velMeasurementBool = false;
 bool armorMeasurementBool = false;
-
 
 //Function To Determine Which Animation To Play, when the user tests if their entered input is correct according to the krupp equation
 QMovie* playAnimation(bool penetrated){
@@ -438,21 +436,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                 {
                     calQString = QString::number(calM);
                     ui->cal_lineEdit->setText(calQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, vel, res, calM, armor, calM);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
-
                 }
                 //set cal result (after converting it to millimeters)
                 else
@@ -460,21 +443,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                     cal = millimetersToInches(calM);
                     calQString = QString::number(cal);
                     ui->cal_lineEdit->setText(calQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, vel, res, cal, armor, cal);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
-
                 }
             }
             //otherwise required fields are filled but not all are numbers
@@ -537,21 +505,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                 {
                     massQString = QString::number(massM);
                     ui->mass_lineEdit->setText(massQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(massM, vel, res, cal, armor, massM);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
-
                 }
                 // set mass result (if mass is in pounds and needs to be converted to kilograms)
                 else
@@ -559,21 +512,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                     mass = kilogramsToPounds(massM);
                     massQString = QString::number(mass);
                     ui->mass_lineEdit->setText(massQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, vel, res, cal, armor, mass);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
-
                 }
             }
             //otherwise the input is filled but is not a number
@@ -635,21 +573,7 @@ void KruppCalculator::on_calculate_btn_clicked()
                 if (velMeasurementBool == false)
                 {
                     velQString = QString::number(velM);
-                    ui->vel_lineEdit->setText(velQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, velM, res, cal, armor, velM);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
+                    ui->vel_lineEdit->setText(calQString);
                 }
                 // set velocity result (if velocity is in feet per second)
                 else
@@ -657,20 +581,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                     vel = metersToFeet(velM);
                     velQString = QString::number(vel);
                     ui->vel_lineEdit->setText(velQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, vel, res, cal, armor, vel);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
                 }
             }
             //If any of the entered fields are not numbers
@@ -729,20 +639,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                 // set resistance result
                 resQString = QString::number(res);
                 ui->res_lineEdit->setText(resQString);
-
-                // if log is full display error message
-                if (logUI.getArrayLength() == 48) {
-                    ui->errorMsg_label->setText("Log is full. Clear Log.");
-                }
-                else
-                {
-                    ui->errorMsg_label->clear();
-                    // add to the log
-                    logUI.setUserInput(mass, vel, res, cal, armor, res);
-
-                    // display to the log
-                    ui->log_textEdit->insertPlainText(logUI.getLog());
-                }
             }
             //if required fields are filled but do not contain numbers output an error message
             else
@@ -804,20 +700,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                 {
                     armorQString = QString::number(armorM);
                     ui->armor_lineEdit->setText(armorQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, vel, res, cal, armorM, armorM);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
                 }
                 // set armor result (if armor is in inches)
                 else
@@ -825,20 +707,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                     armor = millimetersToInches(armorM);
                     armorQString = QString::number(armor);
                     ui->armor_lineEdit->setText(armorQString);
-
-                    // if log is full display error message
-                    if (logUI.getArrayLength() == 48) {
-                        ui->errorMsg_label->setText("Log is full. Clear Log.");
-                    }
-                    else
-                    {
-                        ui->errorMsg_label->clear();
-                        // add to the log
-                        logUI.setUserInput(mass, vel, res, cal, armor, armor);
-
-                        // display to the log
-                        ui->log_textEdit->insertPlainText(logUI.getLog());
-                    }
                 }
             }
             //if all required fields are full, but are not numbers output an error
@@ -911,20 +779,6 @@ void KruppCalculator::on_calculate_btn_clicked()
 
                 //Show Label
                 ui->video_container->show();
-
-                // if log is full display error message
-                if (logUI.getArrayLength() == 48) {
-                    ui->errorMsg_label->setText("Log is full. Clear Log.");
-                }
-                else
-                {
-                    ui->errorMsg_label->clear();
-                    // add to the log
-                    logUI.setUserInput(mass, vel, res, cal, armor, -1);
-
-                    // display to the log
-                    ui->log_textEdit->insertPlainText(logUI.getLog());
-                }
             }
             //if false display an shell bounce
             else
@@ -945,20 +799,6 @@ void KruppCalculator::on_calculate_btn_clicked()
 
                 //Show Label
                 ui->video_container->show();
-
-                // if log is full display error message
-                if (logUI.getArrayLength() == 48) {
-                    ui->errorMsg_label->setText("Log is full. Clear Log.");
-                }
-                else
-                {
-                    ui->errorMsg_label->clear();
-                    // add to the log
-                    logUI.setUserInput(mass, vel, res, cal, armor, -2);
-
-                    // display to the log
-                    ui->log_textEdit->insertPlainText(logUI.getLog());
-                }
             }
         }
         //if required input is entered but any are not numbers display an error
@@ -979,18 +819,5 @@ void KruppCalculator::on_clear_btn_clicked()
     ui->armor_lineEdit->clear();
     ui->vel_lineEdit->clear();
     ui->res_lineEdit->clear();
-}
-
-
-void KruppCalculator::on_clearLog_btn_clicked()
-{
-    // clear message error
-    ui->errorMsg_label->clear();
-
-    // reset length of the arrays
-    logUI.clearArray();
-
-    // clear text area
-    ui->log_textEdit->clear();
 }
 
