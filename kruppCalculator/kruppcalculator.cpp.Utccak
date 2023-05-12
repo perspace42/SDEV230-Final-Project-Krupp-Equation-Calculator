@@ -357,7 +357,6 @@ void KruppCalculator::on_armor_convert_btn_clicked()
             //if input is incorrect (not a number) output an appropriate error message
             else
             {
-                //output the error message
                 ui->errorMsg_label->setText("Armor must be a number.");
             }
         }
@@ -367,50 +366,45 @@ void KruppCalculator::on_armor_convert_btn_clicked()
 // calculate btn
 void KruppCalculator::on_calculate_btn_clicked()
 {
-    //variables for calculating krupp equation (organized by system of measurement)
-    double cal, mass, res, vel, armor; //imperial varibles
+    // variables
+    double cal, mass, res, vel, armor;
     double calM, massM, velM, armorM; // metric varibles
     QString calQString, massQString, resQString, velQString, armorQString;
 
     //Set Video Label To Hidden Until It is Needed Again
     ui->video_container->setVisible(false);
-    //Clear the last result before adding the new one
     ui->result_lineEdit->clear();
     // checks if no areas are filled
     if (ui->armor_lineEdit->text().isEmpty() && ui->vel_lineEdit->text().isEmpty()
         && ui->cal_lineEdit->text().isEmpty() && ui->mass_lineEdit->text().isEmpty()
         && ui->res_lineEdit->text().isEmpty())
     {
-        //if no areas are filled instruct the user that they must fill in all or at least four areas
         ui->errorMsg_label->setText("Fill in all or at least four areas.");
     }
-    // solve for cal (if the calliber field is empty and all other input fields are entered)
+    // solve for cal
     else if (ui->cal_lineEdit->text().isEmpty())
     {
         // check if the rest of the variables are filled
         if (ui->mass_lineEdit->text().isEmpty() || ui->vel_lineEdit->text().isEmpty()
             || ui->armor_lineEdit->text().isEmpty() || ui->res_lineEdit->text().isEmpty())
         {
-            //if not enough areas are filled instruct the user that they must fill in at least four areas
             ui->errorMsg_label->setText("Must fill in at least four areas.");
         }
-        //Otherwise required fields are filled, move on to validating the input
         else
         {
-            //clear previous error message (if any)
             ui->errorMsg_label->clear();
             // check if filled variables are numbers
             if (isNumber(ui->mass_lineEdit->text().toStdString()) && isNumber(ui->vel_lineEdit->text().toStdString())
                 && isNumber(ui->armor_lineEdit->text().toStdString()) && isNumber(ui->res_lineEdit->text().toStdString()))
             {
                 ui->errorMsg_label->clear();
-                // convert entered variables to doubles to be used in the equations
+                // get double variables
                 mass = ui->mass_lineEdit->text().toDouble();
                 vel = ui->vel_lineEdit->text().toDouble();
                 armor = ui->armor_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
-                // Set all variables to metric if they are not metric already
+                // Set all varibles to metric
                 if (massMeasurementBool == true)
                 {
                     massM = poundsToKilograms(mass);
@@ -431,13 +425,12 @@ void KruppCalculator::on_calculate_btn_clicked()
                 calM = solveForCaliber(vel, mass, res, armor);
 
 
-                // set cal result (if already in millimeters)
+                // set cal result
                 if (calMeasurementBool == false)
                 {
                     calQString = QString::number(calM);
                     ui->cal_lineEdit->setText(calQString);
                 }
-                //set cal result (after converting it to millimeters)
                 else
                 {
                     cal = millimetersToInches(calM);
@@ -445,10 +438,8 @@ void KruppCalculator::on_calculate_btn_clicked()
                     ui->cal_lineEdit->setText(calQString);
                 }
             }
-            //otherwise required fields are filled but not all are numbers
             else
             {
-                //output an error message to the user
                 ui->errorMsg_label->setText("All fields must be numbers.");
             }
         }
@@ -460,13 +451,10 @@ void KruppCalculator::on_calculate_btn_clicked()
         if (ui->cal_lineEdit->text().isEmpty() || ui->vel_lineEdit->text().isEmpty()
             || ui->armor_lineEdit->text().isEmpty() || ui->res_lineEdit->text().isEmpty())
         {
-            //send error message if four areas are not filled
             ui->errorMsg_label->setText("Must fill in at least four areas.");
         }
-        //otherwise all input areas are filled move on to input data validation
         else
         {
-            //clear previous error message (if any)
             ui->errorMsg_label->clear();
             // check if filled variables are numbers
             if (isNumber(ui->cal_lineEdit->text().toStdString()) && isNumber(ui->vel_lineEdit->text().toStdString())
@@ -479,7 +467,7 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = ui->armor_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
-                // Set all varibles to metric (if they are not metric already)
+                // Set all varibles to metric
                 if (calMeasurementBool == true)
                 {
                     calM = inchesToMillimeters(cal);
@@ -500,13 +488,12 @@ void KruppCalculator::on_calculate_btn_clicked()
                 massM = solveForMass(vel, armor, res, cal);
 
 
-                // set mass result (if mass is already in kilograms)
+                // set mass result
                 if (massMeasurementBool == false)
                 {
                     massQString = QString::number(massM);
                     ui->mass_lineEdit->setText(massQString);
                 }
-                // set mass result (if mass is in pounds and needs to be converted to kilograms)
                 else
                 {
                     mass = kilogramsToPounds(massM);
@@ -514,10 +501,8 @@ void KruppCalculator::on_calculate_btn_clicked()
                     ui->mass_lineEdit->setText(massQString);
                 }
             }
-            //otherwise the input is filled but is not a number
             else
             {
-                //output an error message to the user that numbers must be entered
                 ui->errorMsg_label->setText("All fields must be numbers.");
             }
         }
@@ -529,13 +514,10 @@ void KruppCalculator::on_calculate_btn_clicked()
         if (ui->mass_lineEdit->text().isEmpty() || ui->cal_lineEdit->text().isEmpty()
             || ui->armor_lineEdit->text().isEmpty() || ui->res_lineEdit->text().isEmpty())
         {
-            //if variables are not filled output an error message
             ui->errorMsg_label->setText("Must fill in at least four areas.");
         }
-        //input is filled move on to input data validation
         else
         {
-            //clear the error message if any is present
             ui->errorMsg_label->clear();
             // check if filled variables are numbers
             if (isNumber(ui->mass_lineEdit->text().toStdString()) && isNumber(ui->cal_lineEdit->text().toStdString())
@@ -548,7 +530,7 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = ui->armor_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
-                // Set all variables to metric (if they are not metric already)
+                // Set all varibles to metric
                 if (calMeasurementBool == true)
                 {
                     calM = inchesToMillimeters(cal);
@@ -569,13 +551,12 @@ void KruppCalculator::on_calculate_btn_clicked()
                 velM = solveForVelocity(armor, mass, res, cal);
 
 
-                // set velocity result (if velocity is in meters per second)
+                // set velocity result
                 if (velMeasurementBool == false)
                 {
                     velQString = QString::number(velM);
                     ui->vel_lineEdit->setText(calQString);
                 }
-                // set velocity result (if velocity is in feet per second)
                 else
                 {
                     vel = metersToFeet(velM);
@@ -583,10 +564,8 @@ void KruppCalculator::on_calculate_btn_clicked()
                     ui->vel_lineEdit->setText(velQString);
                 }
             }
-            //If any of the entered fields are not numbers
             else
             {
-                //output an error message that all field must be numbers
                 ui->errorMsg_label->setText("All fields must be numbers.");
             }
         }
@@ -598,12 +577,10 @@ void KruppCalculator::on_calculate_btn_clicked()
         if (ui->mass_lineEdit->text().isEmpty() || ui->cal_lineEdit->text().isEmpty()
             || ui->armor_lineEdit->text().isEmpty() || ui->vel_lineEdit->text().isEmpty())
         {
-            //if some of the variables are not filled ouput the error message
             ui->errorMsg_label->setText("Must fill in at least four areas.");
         }
         else
         {
-            //clear past error message (if any is present)
             ui->errorMsg_label->clear();
             // check if filled variables are numbers
             if (isNumber(ui->mass_lineEdit->text().toStdString()) && isNumber(ui->cal_lineEdit->text().toStdString())
@@ -616,7 +593,7 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = ui->armor_lineEdit->text().toDouble();
                 vel = ui->vel_lineEdit->text().toDouble();
 
-                // Set all varibles to metric (if they are not metric already)
+                // Set all varibles to metric
                 if (calMeasurementBool == true)
                 {
                     calM = inchesToMillimeters(cal);
@@ -640,10 +617,8 @@ void KruppCalculator::on_calculate_btn_clicked()
                 resQString = QString::number(res);
                 ui->res_lineEdit->setText(resQString);
             }
-            //if required fields are filled but do not contain numbers output an error message
             else
             {
-                //output error message informing user that all fields must be numbers
                 ui->errorMsg_label->setText("All fields must be numbers.");
             }
         }
@@ -655,13 +630,10 @@ void KruppCalculator::on_calculate_btn_clicked()
         if (ui->mass_lineEdit->text().isEmpty() || ui->cal_lineEdit->text().isEmpty()
             || ui->vel_lineEdit->text().isEmpty() || ui->res_lineEdit->text().isEmpty())
         {
-            //if some of the variables are not filled output an error message
             ui->errorMsg_label->setText("Must fill in at least four areas.");
         }
-        //variables are filled move on to input data validation
         else
         {
-            //clear the error message (if any)
             ui->errorMsg_label->clear();
             // check if filled variables are numbers
             if (isNumber(ui->mass_lineEdit->text().toStdString()) && isNumber(ui->cal_lineEdit->text().toStdString())
@@ -674,7 +646,7 @@ void KruppCalculator::on_calculate_btn_clicked()
                 vel = ui->vel_lineEdit->text().toDouble();
                 res = ui->res_lineEdit->text().toDouble();
 
-                // Set all varibles to metric (if they are not metric already)
+                // Set all varibles to metric
                 if (calMeasurementBool == true)
                 {
                     calM = inchesToMillimeters(cal);
@@ -695,13 +667,12 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armorM = solveForArmor(vel, mass, res, cal);
 
 
-                // set armor result (if armor is in millimeters)
+                // set armor result
                 if (armorMeasurementBool == false)
                 {
                     armorQString = QString::number(armorM);
                     ui->armor_lineEdit->setText(armorQString);
                 }
-                // set armor result (if armor is in inches)
                 else
                 {
                     armor = millimetersToInches(armorM);
@@ -709,19 +680,15 @@ void KruppCalculator::on_calculate_btn_clicked()
                     ui->armor_lineEdit->setText(armorQString);
                 }
             }
-            //if all required fields are full, but are not numbers output an error
             else
             {
-                //output the error
                 ui->errorMsg_label->setText("All fields must be numbers.");
             }
         }
     }
-    //if all fields are filled test if the users inputed data values will cause an armor penetration or shell bounce according to the Krupp Equation
     else
     {
         // all fields are filled
-        //clear error message (if any)
         ui->errorMsg_label->clear();
         // check if all fields are numbers
         if (isNumber(ui->mass_lineEdit->text().toStdString()) && isNumber(ui->cal_lineEdit->text().toStdString())
@@ -737,7 +704,7 @@ void KruppCalculator::on_calculate_btn_clicked()
             res = ui->res_lineEdit->text().toDouble();
             armor = ui->armor_lineEdit->text().toDouble();
 
-            // Set all varibles to metric (if they are not metric already)
+            // Set all varibles to metric
             if (calMeasurementBool == true)
             {
                 calM = inchesToMillimeters(cal);
@@ -759,8 +726,7 @@ void KruppCalculator::on_calculate_btn_clicked()
                 armor = armorM;
             }
 
-            // solve for krupp (then display the resulting gif image depending on the result)
-            // if true display an armor penetration
+            // solve for krupp
             if (solveKrupp(armor, vel, mass, res, cal))
             {
                 ui->result_lineEdit->setText("Armor will be penetrated.");
@@ -780,7 +746,6 @@ void KruppCalculator::on_calculate_btn_clicked()
                 //Show Label
                 ui->video_container->show();
             }
-            //if false display an shell bounce
             else
             {
                 ui->result_lineEdit->setText("Armor will not be penetrated.");
@@ -801,19 +766,16 @@ void KruppCalculator::on_calculate_btn_clicked()
                 ui->video_container->show();
             }
         }
-        //if required input is entered but any are not numbers display an error
         else
         {
-            //output the error
             ui->errorMsg_label->setText("All fields must be numbers.");
         }
     }
 }
 
-// clear line edit fields when the clear button is clicked
+// clear line edit fields
 void KruppCalculator::on_clear_btn_clicked()
 {
-    //clear all line edit fields and the result field
     ui->mass_lineEdit->clear();
     ui->cal_lineEdit->clear();
     ui->armor_lineEdit->clear();

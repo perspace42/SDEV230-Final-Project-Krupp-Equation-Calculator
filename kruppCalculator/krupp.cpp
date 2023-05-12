@@ -2,12 +2,11 @@
 Author: Scott Field
 Date: 04/24/2023
 Version: 1.0
-Date: 04/24/2023
 Purpose: The purpose of this file is to store a functions that produces a
 solution for every missing variable in the Krupp Equation.
 
 In addition the program will also
-store a function to convert From Imperial to the Metric system so that either data value can
+store functions to convert From Imperial to the Metric system so that either data value can
 be used for the Krupp Equation
 
 Krupp Equation:
@@ -20,11 +19,6 @@ The equation is as follows:
 Armor Thickness (Armor) [Millimeters] {B} =                                                                    /
                                             (   (    Resistance Constant    ) (Resistance) [     Integer     ] {K} * Square Root(  Projectile Caliber  ) (  Caliber ) [Millimeters] {D}  )
 */
-
-//Functions
-
-
-
 #include <string>
 #include <cmath>
 #include <iostream>
@@ -35,8 +29,9 @@ using namespace std;
 //This function checks if provided input can be converted to a positive number
 bool isNumber(const string& inputString){
     //for each character in the inputString
-
+    //initialize index for for loop
     int index = 0;
+    //get the length of the inputed string
     int length = inputString.length();
     //ensure that only one decimal point is in any given inputted number
     bool decimalFound = false;
@@ -76,22 +71,28 @@ bool isNumber(const string& inputString){
 
 
 //Solve For Missing Variables In The Krupp Equation (Krupp Equation Assumes Metric Values)
+
+//return the missing armor variable
 double solveForArmor(double velocity, double mass, int resistance, double caliber){
     return (  1000 *  (  (velocity * sqrt(mass)) / (resistance * sqrt(caliber))  )   );
 }
 
+//return the missing velocity variable
 double solveForVelocity(double armor, double mass, int resistance,double caliber){
     return (    (   ((armor * resistance) * (sqrt(mass) * sqrt(caliber))) / mass   ) / 1000   );
 }
 
+//return the missing resistance variable
 double solveForResistance(double velocity, double mass, double armor, double caliber){
     return (    1000 * ((velocity * (sqrt(caliber) * sqrt(mass))) / (armor * caliber))   );
 }
 
+//return the missing mass variable
 double solveForMass(double velocity, double armor, int resistance, double caliber){
     return (  (  (((armor * armor) * (resistance * resistance) * caliber)) / (velocity * velocity)  ) / 1'000'000 );
 }
 
+//return the missing caliber variable
 double solveForCaliber(double velocity, double mass, int resistance, double armor){
     return (  (  ((velocity * velocity) * mass) / ((armor * armor) * (resistance * resistance))  ) * 1'000'000);
 }
@@ -103,6 +104,7 @@ double feetToMeters(double feet){
     return feet / 3.281;
 }
 
+//(For converting feet per second into meters per second) (Velocity)
 double metersToFeet(double meters) {
     return meters * 3.281;
 }
@@ -112,6 +114,7 @@ double poundsToKilograms(double pound){
     return pound / 2.2;
 }
 
+//(For converting Kilograms into pounds) (Projectile Mass)
 double kilogramsToPounds(double kilograms) {
     return kilograms * 2.2;
 }
@@ -121,6 +124,7 @@ double  inchesToMillimeters(double inch){
     return inch * 25.4;
 }
 
+//(For converting Millimeters into inches) (Armor Thickness, Projectile Caliber)
 double millimetersToInches(double millimeters) {
     return millimeters / 25.4;
 }
