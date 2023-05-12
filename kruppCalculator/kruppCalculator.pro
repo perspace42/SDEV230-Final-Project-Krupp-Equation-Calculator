@@ -10,12 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     krupp.cpp \
+    log.cpp \
     main.cpp \
     kruppcalculator.cpp
 
 HEADERS += \
     krupp.h \
-    kruppcalculator.h
+    kruppcalculator.h \
+    log.h
 
 FORMS += \
     kruppcalculator.ui
