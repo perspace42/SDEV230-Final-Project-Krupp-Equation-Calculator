@@ -10,13 +10,14 @@ and methods.
 #ifndef KRUPPCALCULATOR_H
 #define KRUPPCALCULATOR_H
 
+#include "log.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KruppCalculator; }
 QT_END_NAMESPACE
 
-class KruppCalculator : public QMainWindow
+class KruppCalculator : public QMainWindow, public log
 {
     Q_OBJECT
 
@@ -38,7 +39,10 @@ private slots:
 
     void on_clear_btn_clicked();
 
+    void on_clearLog_btn_clicked();
+
 private:
     Ui::KruppCalculator *ui;
+    log logUI;
 };
 #endif // KRUPPCALCULATOR_H
